@@ -17,13 +17,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract plugin source
+      - name: Extract corrected source
         run: |
           mkdir -p source
-          unzip -q DeS-Chronicles-Detached-Camera-Studio-Fix.zip -d source
+          unzip -q DeS-Chronicles-Detached-Camera-Studio-Fix-COMPILE-FIX.zip -d source
 
       - name: Set up Java 25
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '25'
@@ -43,4 +43,5 @@ jobs:
           name: DeS-Chronicles-JAR
           path: source/build/libs/*.jar
           if-no-files-found: error
+          retention-days: 14
           
