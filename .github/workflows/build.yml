@@ -17,24 +17,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Extract plugin source
+        run: |
+          mkdir -p source
+          unzip -q DeS-Chronicles-Detached-Camera-Studio-Fix.zip -d source
+
       - name: Set up Java 25
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '25'
-          cache: gradle
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.1.0'
 
       - name: Build plugin
         run: |
-          chmod +x gradlew
-          ./gradlew clean build
+          gradle -p source clean build --no-daemon
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
         with:
           name: DeS-Chronicles-JAR
-          path: build/libs/*.jar
+          path: source/build/libs/*.jar
+          if-no-files-found: error
           
