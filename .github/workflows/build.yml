@@ -1,11 +1,9 @@
 
-name: Build Minecraft Plugin
+name: Build DeS-Chronicles
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -16,32 +14,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 25
+      - name: Set up Java 25
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '25'
+          cache: gradle
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Extract plugin source
+      - name: Build plugin
         run: |
-          mkdir -p source
-          unzip -q "DeS-Chronicles-phase1 (1).zip" -d source
-          test -f source/build.gradle.kts || test -f source/build.gradle
-
-      - name: Build Plugin
-        run: gradle -p source clean build --no-daemon
+          chmod +x gradlew
+          ./gradlew clean build
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
         with:
           name: DeS-Chronicles-JAR
-          path: source/**/build/libs/*.jar
-          if-no-files-found: error
-          retention-days: 14
+          path: build/libs/*.jar
           
